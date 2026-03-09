@@ -1,16 +1,18 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '2.6.2'
+ruby '2.7.2'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 5.2.2'
+gem 'rails', '~> 6.1.3'
 # Use postgresql as the database for Active Record
-gem 'pg', '>= 0.18', '< 2.0'
+gem 'pg'
 # Use Puma as the app server
-gem 'puma', '~> 3.11'
+gem 'puma', '~> 4.3'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
+# Sass engine required by bootstrap
+gem 'sassc-rails'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 # See https://github.com/rails/execjs#readme for more supported runtimes
@@ -27,29 +29,62 @@ gem 'jbuilder', '~> 2.5'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 gem 'rack-cors'
+
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
+# Handle CORs request errors
+gem 'rack-cors', :require => 'rack/cors'
+
 # Reduces boot times through caching; required in config/boot.rb
-gem 'bootsnap', '>= 1.1.0', require: false
+gem 'bootsnap', '~> 1.8.1'
 
-gem "aws-sdk-s3", require: false
+gem "aws-sdk-s3", '~> 1.96'
 
-gem 'spree', '~> 3.7'
-gem 'spree_auth_devise', '~> 3.5'
-gem 'spree_gateway', '~> 3.4'
+gem "net-http"
+
+gem 'spree', github: '1instinct/spree', branch: 'instinct-dna'
+gem 'spree_auth_devise', '~> 4.3'
+gem 'spree_gateway', '~> 3.9'
+
+# gem 'spree_auth_devise', '~> 3.5'
+# gem 'spree_gateway', '~> 3.4'
+
 gem 'spree_static_content', github: 'spree-contrib/spree_static_content'
 
+# gem 'spree_digital', github: 'spree-contrib/spree_digital'
+gem 'spree_reffiliate', github: '1instinct/spree_reffiliate'
+gem 'spree_loyalty_points', github: '1instinct/spree-loyalty-points'
+# gem 'spree_avatax_official', github: 'spree-contrib/spree_avatax_official', branch: 'spree-4-1-plus'
+# gem 'spree_avatax_official', '~> 1.9.0'
+
+gem 'spree_avatar', github: '1instinct/spree_avatar'
+gem 'spree_editor', github: 'spree-contrib/spree_editor'
+
+gem 'paperclip', '~> 6.1.0'
+
+# doesn't support spree 4
+#gem 'spree_promo_users_codes', github: 'vinsol-spree-contrib/spree_promo_users_codes', branch: 'master'
+
+gem 'sprockets-helpers', '~> 1.2.1'
+
 gem 'rest-client'
+# Tool to create APi and it's documentation
+gem 'swagger-blocks'
+# gem 'spree_promo_users_codes', github: 'vinsol-spree-contrib/spree_promo_users_codes', branch: 'master'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'dotenv-rails'
   gem 'prettier'
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
+  # use to seed the records
+  gem 'factory_bot_rails', '~> 5.2'
+  # Use to generate fake data
+  gem 'faker'
 end
 
 group :development do
@@ -64,6 +99,7 @@ end
 group :test do
   # Adds support for Capybara system testing and selenium driver
   gem 'capybara', '>= 2.15'
+  gem 'matrix'
   gem 'selenium-webdriver'
   # Easy installation and use of chromedriver to run system tests with Chrome
   gem 'chromedriver-helper'

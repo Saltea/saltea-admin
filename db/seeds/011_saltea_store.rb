@@ -1,5 +1,6 @@
 # Saltea Store Setup
 # Run: rake db:seed:011_saltea_store
+# Or pipe to dna-admin: cat db/seeds/011_saltea_store.rb | ssh smokey01 "sudo microk8s kubectl exec -i deployment/dna-admin -n default -- rails runner -"
 
 puts "=== Setting up Saltea Store ==="
 
@@ -23,8 +24,8 @@ saltea_store = Spree::Store.find_or_create_by!(code: 'saltea') do |store|
 end
 puts "  Store created: #{saltea_store.name} (id: #{saltea_store.id}, code: #{saltea_store.code})"
 
-# 2. Create taxonomy
-taxonomy = Spree::Taxonomy.find_or_create_by!(name: 'Saltea Flavors', store: saltea_store)
+# 2. Create taxonomy (not store-scoped in this Spree version)
+taxonomy = Spree::Taxonomy.find_or_create_by!(name: 'Saltea Flavors')
 root_taxon = taxonomy.root
 puts "  Taxonomy created: #{taxonomy.name}"
 
@@ -69,15 +70,9 @@ products_data.each do |data|
     price: data[:price],
     meta_description: data[:meta_description],
     available_on: Time.current,
-    shipping_category: shipping_cat,
-    status: 'active'
+    shipping_category: shipping_cat
   )
   product.save!
-
-  # Associate product with Saltea store
-  unless product.stores.include?(saltea_store)
-    product.stores << saltea_store
-  end
 
   # Associate with taxons
   [all_teas, signature].each do |taxon|
@@ -93,7 +88,7 @@ puts ""
 puts "=== Saltea Store Setup Complete ==="
 puts "  Store URL: #{saltea_store.url}"
 puts "  Store Code: #{saltea_store.code}"
-puts "  Products: #{Spree::Product.joins(:stores).where(spree_stores: { id: saltea_store.id }).count}"
+puts "  Products: #{Spree::Product.where(slug: ['the-caribbean-sea', 'the-rio-grande', 'the-finger-lakes']).count}"
 puts ""
 puts "  Next: Generate API token in rails console:"
 puts "    token = Spree::OauthAccessToken.create!(scopes: 'storefront')"

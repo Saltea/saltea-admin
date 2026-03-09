@@ -18,9 +18,13 @@ WORKDIR /app
 
 COPY Gemfile Gemfile.lock ./
 
+ENV RAILS_ENV=production
+
 RUN gem install bundler:2.4.13
 RUN bundle config set force_ruby_platform true
-RUN bundle install
+RUN bundle config set without 'development test'
+# Fix stale lockfile entries, then install
+RUN bundle lock --update mimemagic railties && bundle install
 
 COPY . ./
 

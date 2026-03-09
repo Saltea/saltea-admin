@@ -73,6 +73,9 @@ bower.json
 node_modules/
 /node_modules
 
+# K8s secrets (real values — never commit)
+k8/saltea-admin-secrets.yml
+
 
 
 # Ignore yarn files
