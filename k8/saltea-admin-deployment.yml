@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: saltea-admin
+  namespace: default
+  labels:
+    app: saltea-admin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: saltea-admin
+  template:
+    metadata:
+      labels:
+        app: saltea-admin
+    spec:
+      containers:
+        - name: saltea-admin
+          image: localhost:32000/saltea-admin:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          env:
+            - name: RAILS_ENV
+              value: "production"
+            - name: RAILS_SERVE_STATIC_FILES
+              value: "true"
+            - name: RAILS_LOG_TO_STDOUT
+              value: "true"
+          envFrom:
+            - secretRef:
+                name: saltea-admin-secrets

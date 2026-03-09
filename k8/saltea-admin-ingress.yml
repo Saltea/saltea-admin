@@ -1,0 +1,27 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: saltea-admin
+  namespace: default
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    acme.cert-manager.io/http01-edit-in-place: "true"
+  labels:
+    app: saltea-admin
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: saltea-admin.instinct.is
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: saltea-admin
+                port:
+                  number: 8080
+  tls:
+    - hosts:
+        - saltea-admin.instinct.is
+      secretName: saltea-admin-tls

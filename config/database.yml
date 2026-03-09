@@ -64,6 +64,8 @@ test:
 #
 production:
   <<: *default
-  database: dna_admin_production
-  username: dna_admin
-  password: <%= ENV['DNA_ADMIN_DATABASE_PASSWORD'] %>
+  database: <%= ENV.fetch("DATABASE_NAME", "dna_admin_production") %>
+  username: <%= ENV.fetch("DATABASE_USER", "postgres") %>
+  password: <%= ENV.fetch("DATABASE_PASS") %>
+  host: <%= ENV.fetch("DATABASE_HOST", "db-entrypoint") %>
+  port: <%= ENV.fetch("DATABASE_PORT", "5432") %>
